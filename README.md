@@ -10,9 +10,9 @@ Exploring how to implement in Ada the View-Model paradigm like the Apple’s Swi
 
 ## Implementation Notes
  * **Views** are first-class _task objects_ 
- * **State** data is accessible trough a _protected object_ 
+ * **State** data is accessible through a _protected object_ 
  * **State Data definition** is declared in a specific unit
- * Updating data in the **State** object will call the reistered _callback procedure_ linked to the *update entry* in the **View** _task object_
+ * Updating data in the **State** object will call the registered _callback procedure_ linked to the *update entry* in the **View** _task object_
  * In order to communicate with a _protected object_, The **Business Model Unit** - or main program - has to be a _task object_.
 
  

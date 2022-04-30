@@ -1,0 +1,22 @@
+with "config/SwiftUI_VM_Lab_config.gpr";
+project SwiftUI_VM_Lab is
+
+   for Source_Dirs use ("src/", "config/");
+   for Object_Dir use "obj/" & SwiftUI_VM_Lab_Config.Build_Profile;
+   for Create_Missing_Dirs use "True";
+   for Exec_Dir use "bin";
+   for Main use ("swiftui_vm_lab.adb");
+
+   package Compiler is
+      for Default_Switches ("Ada") use SwiftUI_VM_Lab_Config.Ada_Compiler_Switches;
+   end Compiler;
+
+   package Binder is
+      for Switches ("Ada") use ("-Es"); --  Symbolic traceback
+   end Binder;
+
+   package Naming is
+      for Casing use "mixedcase";
+   end Naming;
+
+end SwiftUI_VM_Lab;

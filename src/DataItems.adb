@@ -1,5 +1,5 @@
 -- ---------------------------------------------------------------------------
--- SPDXVersion: SPDX-2.2 
+-- SPDXVersion: SPDX-2.2
 -- SPDX-FileType: SOURCE
 -- SPDX-LicenseConcluded:  BSD-3-Clause
 -- SPDX-LicenseInfoInFile: BSD-3-Clause

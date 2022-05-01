@@ -1,5 +1,5 @@
 -- ---------------------------------------------------------------------------
--- SPDXVersion: SPDX-2.2 
+-- SPDXVersion: SPDX-2.2
 -- SPDX-FileType: SOURCE
 -- SPDX-LicenseConcluded:  BSD-3-Clause
 -- SPDX-LicenseInfoInFile: BSD-3-Clause
@@ -12,9 +12,9 @@ with Ada.Text_IO;
 package AdaUI_Lab_IO is
 
    CONSOLE : constant Ada.Text_IO.File_Type := Ada.Text_IO.Standard_Output;
-   LOG : constant Ada.Text_IO.File_Type :=   Ada.Text_IO.Standard_Error;
-   
-   type Trace_kind is ( None, Info, Warning, Debug); 
+   LOG     : constant Ada.Text_IO.File_Type := Ada.Text_IO.Standard_Error;
+
+   type Trace_kind is (None, Info, Warning, Debug);
 
    Trace_Level : Trace_kind := Info;
 

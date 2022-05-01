@@ -1,8 +1,17 @@
-with Ada.Text_IO; use Ada.Text_IO;
+-- ---------------------------------------------------------------------------
+-- SPDXVersion: SPDX-2.2 
+-- SPDX-FileType: SOURCE
+-- SPDX-LicenseConcluded:  BSD-3-Clause
+-- SPDX-LicenseInfoInFile: BSD-3-Clause
+-- SPDX-FileCopyrightText: Copyright 2020 William J. Franck (william.franck@sterna.io)
+-- SPDX-Creator: William J. Franck (william.franck@sterna.io)
+-- ---------------------------------------------------------------------------
+
+with AdaUI_Lab_IO; use AdaUI_Lab_IO;
 
 package body ViewState is
 
-   mycallback : callback_proc;
+   StatusChanged_Callback : callback_proc;
    Alive      : Boolean := False;
 
 
@@ -14,21 +23,23 @@ package body ViewState is
       procedure init (State : Data_of_State) is -- when True is
       begin
          Actual_State := State;
-         Put_Line ("Sate of View: Data initialised ...");
+         trace_Line (INFO, "State of View: Data initialised ...");
       end init;
 
       entry register (View_to_update : callback_proc) when not Alive is
       begin
-         Put_Line ("Sate of View: Registering ...");
-         mycallback := View_to_update;
+         trace_Line (INFO, "State of View: Registering ...");
+         StatusChanged_Callback := View_to_update;
          Alive      := True;
       end register;
 
       entry update (State : Data_of_State) when Alive is
       begin
          Actual_State := State;
-         Put_Line ("Sate of View: Data updated ...");
-         mycallback.all;
+         trace_Line (INFO, "State of View: Data updated ...");
+         -- MARK: Sending the "updated status" message to the registered View
+         StatusChanged_Callback.all;
+         -- -----------------------------------------------------------------
 
       end update;
 

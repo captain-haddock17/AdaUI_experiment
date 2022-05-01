@@ -1,8 +1,18 @@
+-- ---------------------------------------------------------------------------
+-- SPDXVersion: SPDX-2.2 
+-- SPDX-FileType: SOURCE
+-- SPDX-LicenseConcluded:  BSD-3-Clause
+-- SPDX-LicenseInfoInFile: BSD-3-Clause
+-- SPDX-FileCopyrightText: Copyright 2020 William J. Franck (william.franck@sterna.io)
+-- SPDX-Creator: William J. Franck (william.franck@sterna.io)
+-- ---------------------------------------------------------------------------
+
 with DataItems; use DataItems;
+
+with AdaUI_Lab_IO; use AdaUI_Lab_IO;
 
 with Ada.Characters.Latin_1;
 use  Ada.Characters;
-
 with Ada.Text_IO; use Ada.Text_IO;
 
 package body ViewContent is
@@ -25,14 +35,14 @@ package body ViewContent is
       for Item_id in 1 .. Data_in_View.Data.Max_Index loop
          Item := Items (Item_id);
 
-         put (Item_id'Image);
-         put ("-");
-         put (Item.completed'Image);
-         -- put_line (Item.Description);
-         put ("   ");
+         put (CONSOLE,Item_id'Image);
+         put (CONSOLE,"-");
+         put (CONSOLE,Item.completed'Image);
+         -- put_line (CONSOLE,Item.Description);
+         put (CONSOLE,"   ");
 
       end loop;
-         New_Line;
+         new_line (CONSOLE);
    end show;
 
    --------------
@@ -40,10 +50,13 @@ package body ViewContent is
    --------------
    procedure update_View is
    begin
-      Put_Line ("Receiving callback ...");
+      trace_Line (DEBUG, "Receiving callback ...");
+      -- MARK: Do activate the state changes to be done on the View --
       myBody.update;
-      Put_Line ("End of callback ...");
+      -- -------------------------------------------------------------
+      trace_Line (DEBUG, "End of callback ...");
    end update_View;
+
 
    -- =========
    -- task View
@@ -54,36 +67,40 @@ package body ViewContent is
       mycallback_for_updating : callback_proc;
 
    begin
-      put_line ("Creating View ...");
-      accept show do
+      trace_Line (INFO, "Creating View ...");
+      accept Init do
 
       -- ---------------------------
       Actual_Data := State.read;
       -- ---------------------------
       show (Data_in_View => Actual_Data);
-      put_line ("View initialized !");
+      trace_Line (INFO, "View initialized !");
 
       mycallback_for_updating := update_View'Access;
-      -- --------------------------------------------------
+      -- MARK: Register this View as to be called back upon a data update --
       State.register (View_to_update => mycallback_for_updating);
-      -- --------------------------------------------------
-      end show;
+      -- -------------------------------------------------------------------
+      end Init;
 
       Active := True;
-      put_line ("Loop !");
+      trace_Line (DEBUG, "Loop !");
       loop
-         select when Active =>
+         select 
+         
+         when Active =>
             accept update do
-               put_line ("**** Updating View ****");
+               trace_Line (INFO, "**** Updating View ****");
             end update;
-            -- ---------------------------
+            -- MARK: Get the new/updated data (state change) -----------------
             Actual_Data := State.read;
-            -- ---------------------------
+            -- MARK: Apply the state change, i.e show the new/updated data) --
             show (Data_in_View => Actual_Data);
-            put_line ("**** View Updated ****");
+            -- ---------------------------------------------------------------
+            trace_Line (DEBUG, "**** View Updated ****");
+
          or
             accept close do
-               put_line ("Closing View ...");
+               trace_Line (INFO, "Closing View ...");
                -- Quit   := True;
                Active := False;
             end close;
@@ -92,7 +109,7 @@ package body ViewContent is
               -- delay 1.0;
          end select;
       end loop;
-      put_line ("View Stopped !!");
+      trace_Line (INFO, "View closed and deallocated !!");
    end View;
 
 end ViewContent;

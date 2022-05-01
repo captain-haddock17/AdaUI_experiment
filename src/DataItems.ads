@@ -1,3 +1,16 @@
+-- ---------------------------------------------------------------------------
+-- SPDXVersion: SPDX-2.2 
+-- SPDX-FileType: SOURCE
+-- SPDX-LicenseConcluded:  BSD-3-Clause
+-- SPDX-LicenseInfoInFile: BSD-3-Clause
+-- SPDX-FileCopyrightText: Copyright 2020 William J. Franck (william.franck@sterna.io)
+-- SPDX-Creator: William J. Franck (william.franck@sterna.io)
+-- ---------------------------------------------------------------------------
+--  @summary Data definitions representing the state of 'View'.
+--
+--  @description These Data definitions will be used by the 3 entities representing the 'View' , the 'State', the 'Data source - or client'.
+-- ---------------------------------------------------------------------------
+
 with Ada.Strings.Wide_Wide_Bounded; use Ada.Strings.Wide_Wide_Bounded;
 
 package DataItems is

@@ -1,4 +1,4 @@
-name = "swiftui_vm_lab"
+name = "adaui_lab"
 description = "Multi-threaded View-Model paradigm of Apple's SwiftUI Windowing system"
 version = "0.1.0"
 
@@ -6,4 +6,4 @@ authors = ["William J. FRANCK"]
 maintainers = ["William J. FRANCK <william@sterna.io>"]
 maintainers-logins = ["captain-haddock17"]
 
-executables = ["swiftui_vm_lab"]
+executables = ["adaui_lab"]

@@ -29,6 +29,8 @@ package ViewState is
 
       entry update (State : Data_of_State);
 
+      entry updated;
+
       function read return Data_of_State;
 
       entry quit;

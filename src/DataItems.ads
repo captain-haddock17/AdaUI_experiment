@@ -1,9 +1,9 @@
 -- ---------------------------------------------------------------------------
--- SPDXVersion: SPDX-2.2 
+-- SPDXVersion: SPDX-2.2
 -- SPDX-FileType: SOURCE
 -- SPDX-LicenseConcluded:  BSD-3-Clause
 -- SPDX-LicenseInfoInFile: BSD-3-Clause
--- SPDX-FileCopyrightText: Copyright 2020 William J. Franck (william.franck@sterna.io)
+-- SPDX-FileCopyrightText: Copyright 2022 William J. Franck (william.franck@sterna.io)
 -- SPDX-Creator: William J. Franck (william.franck@sterna.io)
 -- ---------------------------------------------------------------------------
 --  @summary Data definitions representing the state of 'View'.
@@ -29,8 +29,10 @@ package DataItems is
 -- ==============================================================
    type Objects is array (Identifier'Range) of Object;
    type Object_List is record
-      List      : Objects;
-      Max_Index : Identifier;
+      List              : Objects;
+      Max_Index         : Identifier;
+      User_Acknowledged : Boolean := False;
+      User_Quit         : Boolean := False;
    end record;
 
    function Max (Left, Right : Identifier) return Identifier;

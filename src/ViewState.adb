@@ -13,6 +13,7 @@ package body ViewState is
 
    StatusChanged_Callback : callback_proc;
    Alive                  : Boolean := False;
+   is_updated             : Boolean := False;
 
    -- -------------
    -- State_Of_View
@@ -45,6 +46,7 @@ package body ViewState is
       entry update (State : Data_of_State) when Alive is
       begin
          Actual_State := State;
+         is_updated := True;
          trace_Line (INFO, "State of View: Data updated ...");
          -- MARK: Sending the "updated status" message to the registered View
          StatusChanged_Callback.all;
@@ -52,6 +54,14 @@ package body ViewState is
 
       end update;
 
+
+      -- ----
+      -- updated
+      -- ----
+      entry updated when is_updated is
+      begin
+         is_updated := False;
+      end updated;
 
       -- ----
       -- read
@@ -68,6 +78,8 @@ package body ViewState is
       entry quit when Actual_State.Data.User_Quit is
       begin
          null; -- semaphore
+         trace_Line (INFO, "... Semaphore");
+
       end quit;
          
 

@@ -53,8 +53,6 @@ procedure AdaUI_Lab is
 
    end init;
 
-
-
    -- -----------------
    -- DataSource_Thread
    -- -----------------
@@ -63,17 +61,17 @@ procedure AdaUI_Lab is
 
    task body DataSource_Thread is
 
-      Item         : Object;
+      Item          : Object;
       State_in_View : Data_of_State;
 
    begin
       trace_Line (INFO, "Starting DataSource Thread ...");
       init;
       myBody.init;
---    delay 1.0;
+      -- delay 1.0;
 
       for i in 6 .. 8 loop
-         delay 0.3;
+         delay 1.3;
          trace (DEBUG, '+' & i'Image);
          Item :=
            (Description =>
@@ -99,8 +97,6 @@ procedure AdaUI_Lab is
 
    end DataSource_Thread;
 
-
-
    -- -----------------
    -- UserInput_Thread
    -- -----------------
@@ -114,29 +110,28 @@ procedure AdaUI_Lab is
    begin
       trace_Line (INFO, "Starting UserInput Thread ...");
 
--- select
       loop
-         -- MARK: Get the data of the View before modifying it --
-         State_in_View := State.read;
-         -- -----------------------------------------------------
-         if State_in_View.Data.Max_Index > 0 and not State_in_View.Data.User_Acknowledged then
-            trace_Line (INFO, "User reads the data displayed ...");
-            delay 0.7; -- User reading ...
-            State_in_View.Data.User_Acknowledged := True;
-            -- MARK: Send data to the View by changing its state --
-            State.update (State_in_View);
-            -- ----------------------------------------------------
-         end if;
-         exit when State_in_View.Data.User_Quit;
-      end loop;
--- or delay 7.0;
-      State_in_View.Data.User_Quit := True;
-      -- MARK: Send data to the View by changing its state --
-      State.update (State_in_View);
-      -- ----------------------------------------------------
--- end select;
+         select
+            State.quit;
+            exit;
+          then abort  
+            State.updated;
+            -- MARK: Get the data of the View before modifying it --
+            State_in_View := State.read;
+            -- -----------------------------------------------------
+            if State_in_View.Data.Max_Index > 0 and
+              not State_in_View.Data.User_Acknowledged
+            then
+               trace_Line (INFO, ">>> User reads the data displayed ...");
+               delay 0.7; -- User reading ...
+               State_in_View.Data.User_Acknowledged := True;
+               -- MARK: Send data to the View by changing its state --
+               State.update (State_in_View);
+               -- ----------------------------------------------------
+            end if;
+         end select;
+       end loop;
    end UserInput_Thread;
-
 
 -- ==================================================
 -- MAIN
@@ -147,9 +142,20 @@ procedure AdaUI_Lab is
 begin
    trace_Line (INFO, "Starting main ...");
 
-   delay 1.0;
-   -- MARK: Send a call to the View as to terminate his thread --
+   delay 5.0;
+   trace_Line (INFO, "User asked for quit ...");
+   -- MARK: Get the data of the View before modifying it --
+   Data_in_View := State.read;
+   -- -----------------------------------------------------
+   -- MARK: Modify the state of the View
+   Data_in_View.Data.User_Quit := True;
    -- -----------------------------------------------------------
+   -- MARK: Send data to the View by changing its state --
+   State.update (Data_in_View);
+   -- ---------------------------------
+   -- MARK: Send Close to View --
+   -- myBody.close;
+   -- ----------------------------------------------------
 
    loop
       select

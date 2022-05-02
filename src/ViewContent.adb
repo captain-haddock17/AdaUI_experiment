@@ -82,18 +82,31 @@ package body ViewContent is
       Active := True;
       trace_Line (DEBUG, "Loop !");
       loop
-         select when Active =>
+         select 
+            when Active and not Actual_Data.Data.User_Quit =>
             accept update do
-               trace_Line (INFO, "**** Updating View ****");
+               trace_Line (INFO, "**** Updating State of View ****");
             end update;
             -- MARK: Get the new/updated data (state change) -----------------
             Actual_Data := State.read;
-            -- MARK: Apply the state change, i.e show the new/updated data) --
-            show (Data_in_View => Actual_Data);
-            -- ---------------------------------------------------------------
-            trace_Line (DEBUG, "**** View Updated ****");
-
+            if not Actual_Data.Data.User_Quit then
+                -- MARK: Apply the state change, i.e show the new/updated data) --
+                show (Data_in_View => Actual_Data);
+                -- ---------------------------------------------------------------
+                trace_Line (DEBUG, "**** View Updated ****");
+            else 
+               trace_Line (INFO, "Closing View ...");
+               Active := False;
+                exit;
+            end if;
          or
+            when Actual_Data.Data.User_Quit =>
+            accept update do
+               trace_Line (INFO, "Closing View ...");
+               Active := False;
+            end update;
+            exit;
+        or
             accept close do
                trace_Line (INFO, "Closing View ...");
                -- Quit   := True;

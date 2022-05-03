@@ -33,6 +33,8 @@ package ViewState is
 
       function read return Data_of_State;
 
+      entry updated;
+
       entry quit;
 
    private

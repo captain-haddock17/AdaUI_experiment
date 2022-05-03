@@ -157,17 +157,4 @@ begin
    -- myBody.close;
    -- ----------------------------------------------------
 
-   loop
-      select
-         -- MARK: wait for user quit View --
-         State.quit;
-         -- ---------------------------------
-         trace_Line (INFO, "User asked for quit ...");
-         else
-            delay 0.3;
-      end select;
-      -- MARK: Send Close to View --
-      myBody.close;
-    end loop;
-
 end AdaUI_Lab;
